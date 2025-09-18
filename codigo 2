@@ -1,0 +1,72 @@
+# Orden fijo de materiales (índices alineados con las listas de costos)
+MATERIALES = ["ladrillo", "ventanas", "rejas", "cemento", "madera"]
+
+def mostrar_recursos(recursos):
+    print("\n=== Recursos disponibles ===")
+    for nombre, cant in zip(MATERIALES, recursos):
+        print(f"- {nombre}: {cant}")
+
+def mostrar_edificios(edificios):
+    print("\n=== Edificios disponibles (costes) ===")
+    for i, (nombre, coste) in enumerate(edificios.items(), start=1):
+        coste_str = ", ".join(f"{m}:{c}" for m, c in zip(MATERIALES, coste))
+        print(f"{i}. {nombre} -> {coste_str}")
+
+def suficientes(recursos, coste):
+    return all(r >= c for r, c in zip(recursos, coste))
+
+def construir(recursos, coste):
+    return [r - c for r, c in zip(recursos, coste)]
+
+def main():
+    # Recursos iniciales en el orden de MATERIALES
+    recursos = [800, 100, 120, 500, 500]
+
+    # Costes por edificio en el mismo orden de MATERIALES
+    edificios = {
+        "Zara":             [200, 10, 0,   100, 50],
+        "tienda de cómics": [100,  2, 1,    50, 25],
+        "manicomio":        [300, 30, 100, 150, 100],
+    }
+
+    mostrar_recursos(recursos)
+    mostrar_edificios(edificios)
+
+    # Permitir elegir por número o por nombre
+    eleccion = input("\nElige un edificio (número o nombre): ").strip().lower()
+
+    # Normalizamos la elección
+    nombres = list(edificios.keys())
+    seleccionado = None
+    if eleccion.isdigit():
+        idx = int(eleccion) - 1
+        if 0 <= idx < len(nombres):
+            seleccionado = nombres[idx]
+    else:
+        # Coincidencia flexible por nombre
+        for nombre in nombres:
+            if eleccion == nombre.lower():
+                seleccionado = nombre
+                break
+
+    if not seleccionado:
+        print("⚠️ Edificio no válido.")
+        return
+
+    coste = edificios[seleccionado]
+
+    if not suficientes(recursos, coste):
+        print(f"\nNo hay recursos suficientes para construir '{seleccionado}'.")
+        mostrar_recursos(recursos)
+        return
+
+    recursos = construir(recursos, coste)
+    print(f"\n Has construido '{seleccionado}'.")
+
+    # Mostrar recursos restantes
+    print("\n=== Materiales restantes ===")
+    for nombre, cant in zip(MATERIALES, recursos):
+        print(f"- {nombre}: {cant}")
+
+if __name__ == "__main__":
+    main()
