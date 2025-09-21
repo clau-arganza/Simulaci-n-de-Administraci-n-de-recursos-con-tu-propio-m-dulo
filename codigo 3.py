@@ -22,9 +22,21 @@ def mostrar_edificios():
         print(f"{i}. {nombre} -> {coste_str}")
 
 def buscar_edificios(nombre): 
-    for edificio in edificios:
-        if nombre==edificio.lower():
-            print(nombre)
+    if nombre.isdigit():
+        
+        if int(nombre)>0 and int(nombre)<len(edificios)+1:
+            
+            print(f"  {edificios['tienda de cómics']}")
+        else:
+            print(" no correcto")    
+    else: 
+        for edificio in edificios:
+            if nombre==edificio.lower():
+                print(nombre)
+
+
+    
+
         
 def main():
     mostrar_recursos()
