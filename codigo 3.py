@@ -53,7 +53,7 @@ def crear_edificio(cant_mat,nombre):
             print(f"- {nombre}: {cant}")   
     
     
-    
+
 def main():
     while True:
         mostrar_recursos()
